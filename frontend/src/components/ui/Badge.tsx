@@ -19,12 +19,12 @@ export const Badge: React.FC<BadgeProps> = ({
   title,
 }) => {
   const variants = {
-    emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-    amber: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    rose: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-    indigo: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
-    cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-    slate: 'bg-slate-800/80 text-slate-300 border-slate-700/60',
+    emerald: 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40',
+    amber: 'bg-amber-950/40 text-amber-400 border-amber-800/40',
+    rose: 'bg-rose-950/40 text-rose-400 border-rose-800/40',
+    indigo: 'bg-indigo-950/50 text-indigo-300 border-indigo-800/50',
+    cyan: 'bg-cyan-950/40 text-cyan-400 border-cyan-800/40',
+    slate: 'bg-zinc-800/60 text-zinc-400 border-zinc-700/50',
   };
 
   const dotColors = {
@@ -33,25 +33,25 @@ export const Badge: React.FC<BadgeProps> = ({
     rose: 'bg-rose-400',
     indigo: 'bg-indigo-400',
     cyan: 'bg-cyan-400',
-    slate: 'bg-slate-400',
+    slate: 'bg-zinc-400',
   };
 
   const sizes = {
     sm: 'text-[11px] px-2 py-0.5 font-medium',
-    md: 'text-xs px-2.5 py-1 font-semibold',
+    md: 'text-xs px-2.5 py-0.5 font-medium',
   };
 
   return (
     <span
       title={title}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border transition-all select-none',
+        'inline-flex items-center gap-1.5 rounded-md border transition-colors select-none font-mono',
         variants[variant],
         sizes[size],
         className
       )}
     >
-      {dot && <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse', dotColors[variant])} />}
+      {dot && <span className={cn('w-1.5 h-1.5 rounded-full', dotColors[variant])} />}
       {children}
     </span>
   );

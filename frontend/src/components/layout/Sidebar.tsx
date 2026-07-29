@@ -41,66 +41,54 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   const filteredNav = navigationItems.filter((item) => item.roles.includes(user.role));
 
-  const roleLabels: Record<UserRole, { title: string; color: string }> = {
-    student: { title: 'Student View', color: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20' },
-    faculty: { title: 'Faculty View', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
-    club_leader: { title: 'Club Leader View', color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
-    admin: { title: 'Admin View', color: 'text-rose-400 bg-rose-500/10 border-rose-500/20' },
-  };
-
   return (
     <aside
       className={cn(
-        'fixed top-0 left-0 z-40 h-screen transition-all duration-300 glass-panel border-r border-slate-800/80 flex flex-col justify-between w-64',
+        'fixed top-0 left-0 z-40 h-screen transition-all duration-200 bg-zinc-950 border-r border-zinc-800/80 flex flex-col justify-between w-64',
         !isOpen && '-translate-x-full lg:translate-x-0'
       )}
     >
-      {/* Brand Header */}
       <div>
-        <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800/60">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-brand flex items-center justify-center shadow-lg shadow-indigo-500/30 text-white font-bold text-lg">
-              🚀
+        {/* Brand Header */}
+        <div className="h-14 px-5 flex items-center justify-between border-b border-zinc-800/80">
+          <div className="flex items-center gap-2.5">
+            <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center text-white font-black text-xs">
+              C
             </div>
-            <div>
-              <span className="font-bold text-lg tracking-tight text-white flex items-center gap-1.5">
-                Campus<span className="text-gradient">OS</span>
-              </span>
-              <span className="text-[10px] uppercase font-semibold text-slate-400 block tracking-widest -mt-1">
-                Enterprise SaaS
-              </span>
-            </div>
+            <span className="font-bold text-sm tracking-tight text-white">
+              CampusOS
+            </span>
           </div>
         </div>
 
-        {/* Role Switcher Widget */}
-        <div className="p-4 border-b border-slate-800/40">
-          <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 px-1">
-            Active Persona Mode
+        {/* Persona Switcher */}
+        <div className="p-3 border-b border-zinc-800/60 bg-zinc-900/40">
+          <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5 px-1">
+            Persona Mode
           </label>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="grid grid-cols-2 gap-1">
             {(['student', 'faculty', 'club_leader', 'admin'] as UserRole[]).map((r) => (
               <button
                 key={r}
                 onClick={() => setRole(r)}
                 className={cn(
-                  'text-xs py-1.5 px-2 rounded-lg font-medium border text-left transition-all capitalize flex items-center justify-between',
+                  'text-[11px] py-1 px-2 rounded-md font-medium text-left transition-colors capitalize flex items-center justify-between',
                   user.role === r
-                    ? roleLabels[r].color
-                    : 'bg-slate-900/50 text-slate-400 border-slate-800 hover:text-slate-200 hover:bg-slate-800/50'
+                    ? 'bg-zinc-800 text-zinc-100 border border-zinc-700/60'
+                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
                 )}
               >
                 <span>{r.replace('_', ' ')}</span>
-                {user.role === r && <CheckCircle2 className="w-3 h-3 text-current" />}
+                {user.role === r && <CheckCircle2 className="w-3 h-3 text-indigo-400" />}
               </button>
             ))}
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="p-3 space-y-1">
-          <div className="px-3 py-1.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-            Main Navigation
+        <nav className="p-2 space-y-0.5">
+          <div className="px-3 py-1.5 text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">
+            Navigation
           </div>
           {filteredNav.map((item) => {
             const Icon = item.icon;
@@ -111,31 +99,31 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                 to={item.path}
                 className={({ isActive: active }) =>
                   cn(
-                    'flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all group',
+                    'flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors',
                     active
-                      ? 'bg-gradient-to-r from-indigo-600/90 to-violet-600/90 text-white shadow-md shadow-indigo-500/20 font-semibold'
-                      : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
+                      ? 'bg-zinc-800 text-white font-semibold'
+                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/80'
                   )
                 }
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={cn('w-4 h-4 transition-transform group-hover:scale-110', isActive ? 'text-white' : 'text-slate-400 group-hover:text-indigo-400')} />
+                <div className="flex items-center gap-2.5">
+                  <Icon className={cn('w-4 h-4', isActive ? 'text-indigo-400' : 'text-zinc-400')} />
                   <span>{item.label}</span>
                 </div>
-                {isActive && <ChevronRight className="w-4 h-4 opacity-70" />}
+                {isActive && <ChevronRight className="w-3.5 h-3.5 text-zinc-500" />}
               </NavLink>
             );
           })}
         </nav>
       </div>
 
-      {/* Footer Profile Box */}
-      <div className="p-4 border-t border-slate-800/60 bg-slate-950/40">
-        <div className="flex items-center gap-3">
-          <Avatar name={user.name} roleBadge={user.role} size="md" />
+      {/* User Footer Profile */}
+      <div className="p-3 border-t border-zinc-800/80 bg-zinc-950">
+        <div className="flex items-center gap-2.5">
+          <Avatar name={user.name} roleBadge={user.role} size="sm" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">{user.name}</p>
-            <p className="text-xs text-slate-400 truncate">{user.department}</p>
+            <p className="text-xs font-medium text-white truncate">{user.name}</p>
+            <p className="text-[11px] text-zinc-400 truncate">{user.department}</p>
           </div>
         </div>
       </div>
