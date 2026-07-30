@@ -2,19 +2,15 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/utils/cn';
-import type { UserRole } from '@/types';
 import {
   LayoutDashboard,
-  GraduationCap,
-  QrCode,
+  Calendar,
+  Percent,
   FileCheck2,
-  Users,
-  MessageSquare,
-  Briefcase,
+  BookOpen,
+  User,
   Settings,
-  ShieldAlert,
-  ChevronRight,
-  CheckCircle2,
+  X,
 } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 
@@ -23,132 +19,145 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
-  const { user, setRole } = useAuth();
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
+  const { user } = useAuth();
   const location = useLocation();
 
-  // Role-isolated navigation configuration: Each role has a distinct set of accessible tools
-  const navigationItems = [
-    // Student Routes
-    { label: 'Overview', path: '/dashboard', icon: LayoutDashboard, roles: ['student'] },
-    { label: 'My Courses', path: '/academics', icon: GraduationCap, roles: ['student'] },
-    { label: 'Attendance Status', path: '/attendance', icon: QrCode, roles: ['student'] },
-    { label: 'Submit Assignments', path: '/assignments', icon: FileCheck2, roles: ['student'] },
-    { label: 'Events & Clubs', path: '/clubs', icon: Users, roles: ['student'] },
-    { label: 'Peer Forums', path: '/community', icon: MessageSquare, roles: ['student'] },
-    { label: 'Career Hub', path: '/career', icon: Briefcase, roles: ['student'] },
-
-    // Faculty Routes
-    { label: 'Teaching Portal', path: '/dashboard', icon: LayoutDashboard, roles: ['faculty'] },
-    { label: 'Class Schedules', path: '/academics', icon: GraduationCap, roles: ['faculty'] },
-    { label: 'Mark Attendance', path: '/attendance', icon: QrCode, roles: ['faculty'] },
-    { label: 'Grading Workbench', path: '/assignments', icon: FileCheck2, roles: ['faculty'] },
-    { label: 'Faculty Discussions', path: '/community', icon: MessageSquare, roles: ['faculty'] },
-
-    // Club Leader Routes
-    { label: 'Club Command', path: '/dashboard', icon: LayoutDashboard, roles: ['club_leader'] },
-    { label: 'Manage Events', path: '/clubs', icon: Users, roles: ['club_leader'] },
-    { label: 'Club Announcements', path: '/community', icon: MessageSquare, roles: ['club_leader'] },
-
-    // Admin Routes
-    { label: 'System Pulse', path: '/dashboard', icon: LayoutDashboard, roles: ['admin'] },
-    { label: 'Course Management', path: '/academics', icon: GraduationCap, roles: ['admin'] },
-    { label: 'Attendance Overrides', path: '/attendance', icon: QrCode, roles: ['admin'] },
-    { label: 'Event Approvals', path: '/clubs', icon: Users, roles: ['admin'] },
-    { label: 'Executive Control', path: '/admin', icon: ShieldAlert, roles: ['admin'] },
-
-    // Shared Utility Route
-    { label: 'Settings', path: '/settings', icon: Settings, roles: ['student', 'faculty', 'club_leader', 'admin'] },
+  const studentNavItems = [
+    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Timetable', path: '/timetable', icon: Calendar },
+    { label: 'Attendance', path: '/attendance', icon: Percent },
+    { label: 'Assignments', path: '/assignments', icon: FileCheck2 },
+    { label: 'Notes', path: '/notes', icon: BookOpen },
+    { label: 'Profile', path: '/profile', icon: User },
+    { label: 'Settings', path: '/settings', icon: Settings },
   ];
 
-  const filteredNav = navigationItems.filter((item) => item.roles.includes(user.role));
-
   return (
-    <aside
-      className={cn(
-        'fixed top-0 left-0 z-40 h-screen transition-all duration-200 bg-zinc-950 border-r border-zinc-800/80 flex flex-col justify-between w-64',
-        !isOpen && '-translate-x-full lg:translate-x-0'
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          onClick={onToggle}
+          className="fixed inset-0 z-40 bg-zinc-950/80 backdrop-blur-xs lg:hidden"
+          aria-hidden="true"
+        />
       )}
-    >
-      <div>
-        {/* Brand Header */}
-        <div className="h-14 px-5 flex items-center justify-between border-b border-zinc-800/80">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center text-white font-black text-xs">
-              C
+
+      {/* Main Sidebar */}
+      <aside
+        className={cn(
+          'fixed top-0 left-0 z-50 h-screen transition-transform duration-200 ease-in-out bg-zinc-950 border-r border-zinc-800 flex flex-col justify-between w-64 md:w-60',
+          !isOpen && '-translate-x-full lg:translate-x-0'
+        )}
+      >
+        <div>
+          {/* Brand Header */}
+          <div className="h-14 md:h-13 px-4 flex items-center justify-between border-b border-zinc-800">
+            <div className="flex items-center gap-2.5">
+              <div className="w-6 h-6 md:w-5 md:h-5 rounded bg-zinc-100 flex items-center justify-center text-zinc-950 font-bold text-xs">
+                C
+              </div>
+              <span className="font-semibold text-sm md:text-xs tracking-tight text-zinc-100">
+                CampusHub
+              </span>
             </div>
-            <span className="font-bold text-sm tracking-tight text-white">
-              CampusOS
-            </span>
-          </div>
-        </div>
 
-        {/* Role Persona Switcher */}
-        <div className="p-3 border-b border-zinc-800/60 bg-zinc-900/40">
-          <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider block mb-1.5 px-1">
-            Active User Persona
-          </label>
-          <div className="grid grid-cols-2 gap-1">
-            {(['student', 'faculty', 'club_leader', 'admin'] as UserRole[]).map((r) => (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono text-zinc-500 border border-zinc-800 px-1.5 py-0.5 rounded">
+                Student
+              </span>
               <button
-                key={r}
-                onClick={() => setRole(r)}
-                className={cn(
-                  'text-[11px] py-1 px-2 rounded-md font-medium text-left transition-colors capitalize flex items-center justify-between',
-                  user.role === r
-                    ? 'bg-zinc-800 text-zinc-100 border border-zinc-700/60 font-semibold'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
-                )}
+                onClick={onToggle}
+                className="lg:hidden p-1.5 rounded text-zinc-400 hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
-                <span>{r.replace('_', ' ')}</span>
-                {user.role === r && <CheckCircle2 className="w-3 h-3 text-indigo-400" />}
+                <X className="w-5 h-5" />
               </button>
-            ))}
+            </div>
           </div>
+
+          {/* Student Status */}
+          <div className="p-3 border-b border-zinc-800/80 bg-zinc-950">
+            <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+              {user.department}
+            </p>
+            <p className="text-xs text-zinc-400 font-mono mt-0.5">
+              Div {user.division} • Roll {user.rollNumber} • {user.semester}
+            </p>
+          </div>
+
+          {/* Navigation List */}
+          <nav className="p-2 space-y-1 md:space-y-0.5">
+            <div className="px-2.5 py-1 text-[10px] font-mono font-medium text-zinc-500 uppercase tracking-wider">
+              Menu
+            </div>
+            {studentNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => {
+                    if (window.innerWidth < 1024) onToggle();
+                  }}
+                  className={({ isActive: active }) =>
+                    cn(
+                      'flex items-center justify-between px-3 md:px-2.5 py-3 md:py-1.5 rounded text-sm md:text-xs font-medium transition-colors min-h-[44px] md:min-h-0',
+                      active
+                        ? 'bg-zinc-800 text-zinc-100 font-semibold'
+                        : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                    )
+                  }
+                >
+                  <div className="flex items-center gap-3 md:gap-2.5">
+                    <Icon className={cn('w-4 h-4 md:w-3.5 md:h-3.5', isActive ? 'text-zinc-100' : 'text-zinc-400')} />
+                    <span>{item.label}</span>
+                  </div>
+                </NavLink>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Role-Specific Navigation */}
-        <nav className="p-2 space-y-0.5">
-          <div className="px-3 py-1.5 text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">
-            {user.role.replace('_', ' ')} Navigation
-          </div>
-          {filteredNav.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <NavLink
-                key={`${item.path}-${item.label}`}
-                to={item.path}
-                className={({ isActive: active }) =>
-                  cn(
-                    'flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors',
-                    active
-                      ? 'bg-zinc-800 text-white font-semibold'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/80'
-                  )
-                }
-              >
-                <div className="flex items-center gap-2.5">
-                  <Icon className={cn('w-4 h-4', isActive ? 'text-indigo-400' : 'text-zinc-400')} />
-                  <span>{item.label}</span>
-                </div>
-                {isActive && <ChevronRight className="w-3.5 h-3.5 text-zinc-500" />}
-              </NavLink>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Footer Profile */}
-      <div className="p-3 border-t border-zinc-800/80 bg-zinc-950">
-        <div className="flex items-center gap-2.5">
-          <Avatar name={user.name} roleBadge={user.role} size="sm" />
+        {/* Footer Profile */}
+        <NavLink
+          to="/profile"
+          onClick={() => {
+            if (window.innerWidth < 1024) onToggle();
+          }}
+          className="p-3 border-t border-zinc-800 bg-zinc-950 hover:bg-zinc-900 transition-colors flex items-center gap-2.5 min-h-[44px]"
+        >
+          <Avatar name={user.name} roleBadge="student" size="sm" />
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-white truncate">{user.name}</p>
-            <p className="text-[11px] text-zinc-400 truncate capitalize">{user.role.replace('_', ' ')}</p>
+            <p className="text-xs font-medium text-zinc-200 truncate">{user.name}</p>
+            <p className="text-[10px] font-mono text-zinc-500 truncate">{user.studentId}</p>
           </div>
-        </div>
+        </NavLink>
+      </aside>
+
+      {/* One-Handed Mobile Bottom Navigation Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-zinc-950/95 border-t border-zinc-800 px-1 py-1 flex items-center justify-around">
+        {studentNavItems.slice(0, 5).map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive: active }) =>
+                cn(
+                  'flex-1 flex flex-col items-center justify-center py-2 px-1 rounded min-h-[48px] text-[10px] font-mono transition-colors select-none',
+                  active ? 'text-zinc-100 font-bold bg-zinc-900' : 'text-zinc-400 hover:text-zinc-200'
+                )
+              }
+            >
+              <Icon className={cn('w-4 h-4 mb-0.5', isActive ? 'text-zinc-100' : 'text-zinc-400')} />
+              <span className="truncate max-w-[64px] text-center">{item.label}</span>
+            </NavLink>
+          );
+        })}
       </div>
-    </aside>
+    </>
   );
 };

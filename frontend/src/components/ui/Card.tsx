@@ -3,8 +3,6 @@ import { cn } from '@/utils/cn';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  variant?: 'glass' | 'solid' | 'gradient';
-  glow?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -15,7 +13,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={cn(
-        'bg-zinc-900/90 border border-zinc-800/80 rounded-xl p-5 transition-colors',
+        'bg-zinc-900/60 border border-zinc-800 rounded-lg p-5 transition-colors',
         className
       )}
       {...props}

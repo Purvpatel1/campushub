@@ -1,67 +1,51 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { UserProfile, UserRole } from '@/types';
+import type { UserProfile } from '@/types';
 
 interface AuthContextType {
   user: UserProfile;
-  setRole: (role: UserRole) => void;
+  updateUser: (updates: Partial<UserProfile>) => void;
+  logout: () => void;
 }
 
-const mockProfiles: Record<UserRole, UserProfile> = {
-  student: {
-    id: 'usr-101',
-    name: 'Alex Chen',
-    email: 'alex.chen@campushub.edu',
-    role: 'student',
-    department: 'Computer Science & Engineering',
-    studentId: 'CS-2024-8842',
-    semester: 'Semester 6',
-  },
-  faculty: {
-    id: 'usr-202',
-    name: 'Dr. Aris Thorne',
-    email: 'aris.thorne@campushub.edu',
-    role: 'faculty',
-    department: 'Department of Physics & CS',
-    facultyId: 'FAC-7731',
-  },
-  club_leader: {
-    id: 'usr-303',
-    name: 'Maya Patel',
-    email: 'maya.patel@campushub.edu',
-    role: 'club_leader',
-    department: 'Design & Innovation Lab',
-    studentId: 'DES-2023-1109',
-    semester: 'Semester 8',
-  },
-  admin: {
-    id: 'usr-404',
-    name: 'Robert Vance',
-    email: 'robert.vance@campushub.edu',
-    role: 'admin',
-    department: 'Office of the Registrar',
-  },
+const defaultUser: UserProfile = {
+  id: 'u-1',
+  name: 'Aarav Patel',
+  email: 'aarav.patel@campushub.edu',
+  role: 'student',
+  department: 'Computer Science & Engineering',
+  semester: 'Semester 6',
+  studentId: '2023CSB042',
+  rollNumber: '42',
+  division: 'A',
+  avatarUrl: '',
+  cgpa: 8.68,
+  targetAttendance: 75,
+  phone: '+91 98765 43210',
+  bio: 'Computer Science undergraduate specializing in Database Systems and Algorithms.',
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: defaultUser,
+  updateUser: () => {},
+  logout: () => {},
+});
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile>(mockProfiles.student);
+  const [user, setUser] = useState<UserProfile>(defaultUser);
 
-  const setRole = (role: UserRole) => {
-    setUser(mockProfiles[role]);
+  const updateUser = (updates: Partial<UserProfile>) => {
+    setUser((prev) => ({ ...prev, ...updates }));
+  };
+
+  const logout = () => {
+    setUser(defaultUser);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setRole }}>
+    <AuthContext.Provider value={{ user, updateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);

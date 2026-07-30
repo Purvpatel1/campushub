@@ -19,12 +19,12 @@ export const Badge: React.FC<BadgeProps> = ({
   title,
 }) => {
   const variants = {
-    emerald: 'bg-emerald-950/40 text-emerald-400 border-emerald-800/40',
-    amber: 'bg-amber-950/40 text-amber-400 border-amber-800/40',
-    rose: 'bg-rose-950/40 text-rose-400 border-rose-800/40',
-    indigo: 'bg-indigo-950/50 text-indigo-300 border-indigo-800/50',
-    cyan: 'bg-cyan-950/40 text-cyan-400 border-cyan-800/40',
-    slate: 'bg-zinc-800/60 text-zinc-400 border-zinc-700/50',
+    emerald: 'bg-zinc-900 text-emerald-400 border-zinc-800',
+    amber: 'bg-zinc-900 text-amber-400 border-zinc-800',
+    rose: 'bg-zinc-900 text-rose-400 border-zinc-800',
+    indigo: 'bg-zinc-900 text-indigo-400 border-zinc-800',
+    cyan: 'bg-zinc-900 text-cyan-400 border-zinc-800',
+    slate: 'bg-zinc-900 text-zinc-400 border-zinc-800',
   };
 
   const dotColors = {
@@ -45,7 +45,7 @@ export const Badge: React.FC<BadgeProps> = ({
     <span
       title={title}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-md border transition-colors select-none font-mono',
+        'inline-flex items-center gap-1.5 rounded border font-mono select-none',
         variants[variant],
         sizes[size],
         className

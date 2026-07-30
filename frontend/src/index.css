@@ -17,11 +17,11 @@
   }
 }
 
-/* Minimalist Component Utilities (Linear / Vercel style) */
+/* Linear / Vercel / Notion Minimal Component Classes */
 .card-base {
   background-color: #121215;
   border: 1px solid #27272a;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 1.25rem;
 }
 
@@ -29,15 +29,15 @@
   background-color: #09090b;
   border: 1px solid #27272a;
   color: #f4f4f5;
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   transition: border-color 0.15s ease;
 }
 
 .input-base:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: #52525b;
 }
 
 /* Custom Minimalist Scrollbar */
